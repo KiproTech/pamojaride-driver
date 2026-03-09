@@ -1,0 +1,99 @@
+/* ratings.css */
+
+.ratings-page {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.ratings-page h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+/* ------------------- Summary ------------------- */
+.ratings-summary {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.summary-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1 1 30%;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.summary-card:hover {
+  transform: translateY(-3px);
+}
+
+.summary-card h3 {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.summary-card p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.stars {
+  color: #FFD700; /* gold/yellow */
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* ------------------- Ratings List ------------------- */
+.ratings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rating-item {
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.rating-item:hover {
+  transform: translateY(-2px);
+}
+
+.rating-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 6px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.rating-item p {
+  margin: 0;
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+  .ratings-summary {
+    flex-direction: column;
+  }
+  .summary-card {
+    flex: 1 1 100%;
+  }
+}

@@ -1,0 +1,67 @@
+.trip-history-page {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.trip-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  padding: 15px;
+  background: #f9f9f9;
+}
+
+.trip-summary {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.trip-details {
+  margin-top: 15px;
+}
+
+.download-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.download-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  background-color: #38bdf8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.download-btn:hover {
+  background-color: #0ea5e9;
+}
+
+.trip-passenger-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.trip-passenger-table th,
+.trip-passenger-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.trip-passenger-table th {
+  background-color: #e5e7eb;
+}
+
+.cancelled-passenger {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
