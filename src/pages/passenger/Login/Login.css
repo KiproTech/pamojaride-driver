@@ -1,0 +1,153 @@
+/* Full page background */
+.passenger-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url('../../../assets/images/login-bg.jpg') no-repeat center center/cover;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+/* Card */
+.passenger-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.passenger-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Logo */
+.logo-container {
+  margin-bottom: 20px;
+}
+
+.logo-container img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.logo-container h2 {
+  margin-top: 10px;
+  font-size: 24px;
+  color: #3b82f6;
+  font-weight: bold;
+}
+
+/* Inputs */
+.passenger-card input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.passenger-card input:focus {
+  border-color: #3b82f6;
+}
+
+/* Input group spacing */
+.input-group {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+/* Password container */
+.password-container {
+  position: relative;
+}
+
+.password-container input {
+  padding-right: 40px;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Button */
+.passenger-card button {
+  width: 100%;
+  padding: 12px;
+  background-color: #3b82f6;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.passenger-card button:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+/* Messages */
+.error {
+  color: #dc2626;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.success {
+  color: #16a34a;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* Links */
+.login-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-links a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-links a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile responsive */
+@media (max-width: 400px) {
+
+  .passenger-card {
+    padding: 30px 20px;
+  }
+
+  .logo-container img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .logo-container h2 {
+    font-size: 22px;
+  }
+
+}

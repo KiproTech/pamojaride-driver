@@ -1,0 +1,130 @@
+.topbar-passenger{
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 60px;
+background: white;
+border-bottom: 1px solid #ddd;
+z-index: 2000;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 20px;
+}
+
+.topbar-left{
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.menu-btn{
+font-size: 20px;
+border: none;
+background: transparent;
+cursor: pointer;
+}
+
+.topbar-logo{
+height: 35px;
+}
+
+.system-name{
+font-weight: 700;
+font-size: 18px;
+}
+
+.topbar-center{
+font-size: 16px;
+font-weight: 500;
+}
+
+.topbar-right{
+display: flex;
+align-items: center;
+gap: 20px;
+position: relative;
+overflow: visible;
+}
+
+.notification{
+position: relative;
+cursor: pointer;
+font-size: 20px;
+}
+
+.badge{
+position: absolute;
+top: -5px;
+right: -8px;
+background: red;
+color: white;
+font-size: 12px;
+padding: 2px 6px;
+border-radius: 50%;
+}
+
+.status{
+font-size: 14px;
+color: green;
+}
+
+.profile{
+display: flex;
+align-items: center;
+gap: 8px;
+cursor: pointer;
+position: relative;
+}
+
+.profile-pic{
+width: 32px;
+height: 32px;
+border-radius: 50%;
+}
+
+.profile-dropdown{
+position: absolute;
+top: 45px;
+right: 0;
+background: white;
+border: 1px solid #ddd;
+border-radius: 6px;
+width: 150px;
+box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+z-index: 3000;
+display: flex;
+flex-direction: column;
+}
+
+.profile-dropdown button{
+padding: 10px;
+border: none;
+background: transparent;
+cursor: pointer;
+text-align: left;
+}
+
+.profile-dropdown button:hover
+
+.notification-dropdown{
+position: absolute;
+top: 40px;
+right: 0;
+background: white;
+border: 1px solid #ddd;
+border-radius: 6px;
+width: 250px;
+box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+z-index: 3000;
+}
+
+.notification-item{
+padding: 10px;
+border-bottom: 1px solid #eee;
+}
+
+.notification-item:last-child{
+border-bottom: none;
+}

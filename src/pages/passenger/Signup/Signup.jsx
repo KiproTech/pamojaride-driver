@@ -1,28 +1,33 @@
+// src/pages/passenger/Signup/Signup.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import logo from "../../assets/images/Pamojaride.png";
-import "./Login.css";
-import { registerUser } from "../../services/api";
+import { usePassenger } from "../../../context/PassengerContext"; // <- correct context
+import logo from "../../../assets/images/Pamojaride.png";
+import "../Login/Login.css";
+import { registerPassenger, setToken } from "../../../services/api";
 
-const Signup = ({ onSignup }) => {
+const Signup = () => {
   const navigate = useNavigate();
+  const { updatePassenger } = usePassenger(); // <- usePassenger hook
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   const validateInput = () => {
     const newErrors = {};
-    if (fullName.trim().split(" ").length < 2) newErrors.fullName = "Full name must contain at least two words.";
+    if (fullName.trim().split(" ").length < 2) {
+      newErrors.fullName = "Full name must contain at least two names.";
+    }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) newErrors.email = "Please enter a valid email address.";
+    if (!emailRegex.test(email)) newErrors.email = "Enter a valid email address.";
     const phoneRegex = /^\d{10,12}$/;
-    if (!phoneRegex.test(phone)) newErrors.phone = "Phone number must be 10 to 12 digits.";
+    if (!phoneRegex.test(phone)) newErrors.phone = "Phone number must be 10-12 digits.";
     if (password.length < 6) newErrors.password = "Password must be at least 6 characters.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -31,40 +36,43 @@ const Signup = ({ onSignup }) => {
   const handleSignup = async (e) => {
     e.preventDefault();
     setErrors({});
-    setSuccess("");
-
-    if (!validateInput()) return;
-
     setLoading(true);
-    try {
-      const data = await registerUser(fullName, email, password, phone);
 
-      if (!data?.success) {
-        setErrors({ general: data?.message || "Signup failed." });
+    if (!validateInput()) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await registerPassenger(fullName, email, password, phone);
+
+      if (!res?.success) {
+        setErrors({ general: res?.message || "Signup failed." });
+        setLoading(false);
         return;
       }
 
-      setSuccess("Registration successful! Redirecting...");
-      if (onSignup) onSignup(data.user);
+      // Save token and passenger data
+      setToken(res.token);
+      updatePassenger(res.passenger);
 
-      setTimeout(() => navigate("/dashboard"), 1500);
+      navigate("/passenger/dashboard", { replace: true });
     } catch (err) {
-      setErrors({ general: err?.message || "Server error. Please try again." });
+      setErrors({ general: err.message || "Signup failed." });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
+    <div className="passenger-login-container">
+      <div className="login-card passenger-card">
         <div className="logo-container">
           <img src={logo} alt="PamojaRide Logo" />
-          <h2>Sign Up</h2>
+          <h2>Passenger Sign Up</h2>
         </div>
 
         {errors.general && <p className="error">{errors.general}</p>}
-        {success && <p className="success">{success}</p>}
 
         <form onSubmit={handleSignup}>
           <div className="input-group">
@@ -114,16 +122,17 @@ const Signup = ({ onSignup }) => {
           </div>
 
           <button type="submit" disabled={loading}>
-            {loading ? "Signing up..." : "Sign Up"}
+            {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
-        <p className="login-direct">
-          Already have an account? <Link to="/login">Login</Link>
-        </p>
+        <div className="login-links">
+          <span>Already have an account?</span>
+          <Link to="/passenger/login">Login</Link>
+        </div>
       </div>
     </div>
   );
-}; 
+};
 
 export default Signup;

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/images/Pamojaride.png";
+import logo from "../../../assets/images/Pamojaride.png";
 import "./Landing.css";
 
 const Landing = () => {

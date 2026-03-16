@@ -1,0 +1,388 @@
+.passenger-dashboard {
+  padding: 80px 20px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* HEADER */
+
+.dashboard-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid #e5e7eb;
+  z-index: 1000;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashboard-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #10b981;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.notifications {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-pic {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* DASHBOARD CONTENT */
+
+.dashboard-content {
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* DASHBOARD CARDS */
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.card h4 {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #555;
+}
+
+.card p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #10b981;
+}
+
+/* TRIP CARD */
+
+.trip-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.trip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.trip-status {
+  background: #10b981;
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+/* ROUTE */
+
+.trip-route {
+  margin-bottom: 15px;
+}
+
+.route-point {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.route-line {
+  height: 30px;
+  border-left: 2px dashed #ccc;
+  margin-left: 6px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.start {
+  background: #10b981;
+}
+
+.end {
+  background: #ef4444;
+}
+
+/* DETAILS */
+
+.trip-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+/* DRIVER SECTION */
+
+.driver-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.driver-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.driver-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.driver-name {
+  font-weight: 600;
+}
+
+.driver-phone {
+  font-size: 13px;
+  color: #666;
+}
+
+.call-driver {
+  background: #3b82f6;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+/* NAVIGATION BUTTON */
+
+.navigate-btn {
+  width: 100%;
+  background: #10b981;
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.navigate-btn:hover {
+  background: #0ea371;
+}
+
+/* BACKGROUND IMPROVEMENT */
+
+.passenger-dashboard {
+  padding: 80px 20px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg,#f9fafb,#eef2ff);
+  min-height: 100vh;
+}
+
+/* GLASS EFFECT FOR CARDS */
+
+.card,
+.trip-card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* CARD HOVER EFFECT */
+
+.card:hover,
+.trip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+}
+
+/* DRIVER CALL BUTTON HOVER */
+
+.call-driver {
+  background: #3b82f6;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+
+.call-driver:hover {
+  background: #2563eb;
+}
+
+/* NAVIGATE BUTTON IMPROVEMENT */
+
+.navigate-btn {
+  width: 100%;
+  background: linear-gradient(135deg,#10b981,#059669);
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.navigate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(16,185,129,0.3);
+}
+
+/* PROFILE HOVER */
+
+.profile:hover {
+  opacity: 0.85;
+}
+
+/* NOTIFICATION HOVER */
+
+.notifications:hover {
+  transform: scale(1.1);
+  transition: 0.15s;
+}
+
+/* BACKGROUND IMPROVEMENT */
+
+.passenger-dashboard {
+  padding: 80px 20px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg,#f9fafb,#eef2ff);
+  min-height: 100vh;
+}
+
+/* GLASS EFFECT FOR CARDS */
+
+.card,
+.trip-card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* CARD HOVER EFFECT */
+
+.card:hover,
+.trip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+}
+
+/* DRIVER CALL BUTTON HOVER */
+
+.call-driver {
+  background: #3b82f6;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+
+.call-driver:hover {
+  background: #2563eb;
+}
+
+/* NAVIGATE BUTTON IMPROVEMENT */
+
+.navigate-btn {
+  width: 100%;
+  background: linear-gradient(135deg,#10b981,#059669);
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.navigate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(16,185,129,0.3);
+}
+
+/* PROFILE HOVER */
+
+.profile:hover {
+  opacity: 0.85;
+}
+
+/* NOTIFICATION HOVER */
+
+.notifications:hover {
+  transform: scale(1.1);
+  transition: 0.15s;
+}

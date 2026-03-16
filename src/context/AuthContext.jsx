@@ -1,4 +1,3 @@
-// Frontend/pamojaride-driver/src/context/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
@@ -7,13 +6,22 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser && storedUser !== "undefined") {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (err) {
+      console.warn("Failed to parse user from localStorage:", err);
+      localStorage.removeItem("user");
+    }
   }, []);
 
   const login = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+    if (userData) {
+      localStorage.setItem("user", JSON.stringify(userData));
+      setUser(userData);
+    }
   };
 
   const logout = () => {
@@ -29,5 +37,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// ✅ Make sure this is exported
+// ✅ Export the hook so other components can use it
 export const useAuth = () => useContext(AuthContext);

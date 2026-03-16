@@ -1,0 +1,16 @@
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  text-align: center;
+}
+
+.landing-page h1 {
+  color: #10b981;
+}
+
+.landing-page p {
+  color: #333;
+}

@@ -1,0 +1,89 @@
+.passenger-profile {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.avatar-section {
+  position: relative;
+  margin-right: 20px;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.edit-avatar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #10b981;
+  color: #fff;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.info-section p {
+  margin: 5px 0;
+}
+
+.info-section button {
+  margin-top: 10px;
+  background: #10b981;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.edit-form {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.edit-form .form-group {
+  margin-bottom: 10px;
+}
+
+.edit-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.edit-form input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.password-card button {
+  background: #10b981;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.password-card button:hover {
+  background: #059669;
+}

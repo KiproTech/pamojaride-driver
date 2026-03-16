@@ -3,6 +3,9 @@
 // ==============================
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
+
+export { BASE_URL };
+
 // ==============================
 // Token Handling
 // ==============================
@@ -18,10 +21,35 @@ export const getToken = () => {
 export const clearToken = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
+  localStorage.removeItem("passenger");
+};
+
+// ==============================A
+// Notification System
+// ==============================
+const notify = (message, type = "success", duration = 3000) => {
+  const container = document.createElement("div");
+  container.textContent = message;
+  container.style.position = "fixed";
+  container.style.top = "20px";
+  container.style.right = "20px";
+  container.style.background = type === "success" ? "#4caf50" : "#f44336";
+  container.style.color = "#fff";
+  container.style.padding = "12px 20px";
+  container.style.borderRadius = "8px";
+  container.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
+  container.style.zIndex = 9999;
+  container.style.fontFamily = "sans-serif";
+  container.style.transition = "opacity 0.3s ease";
+  document.body.appendChild(container);
+  setTimeout(() => {
+    container.style.opacity = "0";
+    setTimeout(() => document.body.removeChild(container), 300);
+  }, duration);
 };
 
 // ==============================
-// Centralized Headers
+// Centralized Headers & Request Helper
 // ==============================
 const getHeaders = () => {
   const token = getToken();
@@ -31,9 +59,6 @@ const getHeaders = () => {
   };
 };
 
-// ==============================
-// Centralized API Request Helper
-// ==============================
 export const apiRequest = async (endpoint, options = {}) => {
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     method: options.method || "GET",
@@ -44,13 +69,15 @@ export const apiRequest = async (endpoint, options = {}) => {
   let data = {};
   try {
     data = await res.json();
-  } catch {}
+  } catch (err) {
+    throw new Error("Invalid JSON response from server");
+  }
 
   if (!res.ok) {
     const message = data?.message || data?.error || `Request failed (${res.status})`;
+    notify(message, "error");
     if ((res.status === 401 || res.status === 403) && !endpoint.startsWith("/auth/")) {
       clearToken();
-      throw new Error("Session expired. Please log in again.");
     }
     throw new Error(message);
   }
@@ -63,9 +90,6 @@ export const apiRequest = async (endpoint, options = {}) => {
 // ==============================
 const unwrapArray = (res) => (Array.isArray(res?.data) ? res.data : []);
 
-// ==============================
-// 🔥 DO NOT CHANGE FIELD NAMES
-// ==============================
 const normalizeTrip = (t = {}) => ({
   id: t.id,
   driver_id: t.driver_id,
@@ -93,9 +117,6 @@ const normalizeBooking = (b = {}, type = "active") => ({
   status: b.status ?? type,
 });
 
-// ==============================
-// 🔥 DASHBOARD NORMALIZER
-// ==============================
 const normalizeDashboard = (data = {}) => ({
   completed_trips: Number(data.completed_trips) || 0,
   upcoming_trips: Number(data.upcoming_trips) || 0,
@@ -107,7 +128,7 @@ const normalizeDashboard = (data = {}) => ({
 });
 
 // ==============================
-// AUTH APIs
+// DRIVER AUTH
 // ==============================
 export const loginUser = async (email, password) => {
   const data = await apiRequest("/auth/login", {
@@ -118,6 +139,8 @@ export const loginUser = async (email, password) => {
   if (data?.success && data.token) {
     setToken(data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("role", "driver"); // <-- store role
+    notify("Login successful!");
   }
 
   return data;
@@ -129,16 +152,42 @@ export const registerUser = async (full_name, email, password, phone) => {
     body: JSON.stringify({ full_name, email, password, phone }),
   });
 
+  if (data?.success) notify(data.message || "Driver registered successfully!");
+  return data;
+};
+
+// ==============================
+// PASSENGER AUTH
+// ==============================
+export const loginPassenger = async (email, password) => {
+  const data = await apiRequest("/auth/passenger/login", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+
   if (data?.success && data.token) {
     setToken(data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("passenger", JSON.stringify(data.passenger));
+    localStorage.setItem("role", "passenger"); // <-- store role
+    notify("Passenger login successful!");
   }
 
   return data;
 };
 
+export const registerPassenger = async (full_name, email, password, phone) => {
+  const data = await apiRequest("/auth/passenger/register", {
+    method: "POST",
+    body: JSON.stringify({ full_name, email, password, phone }),
+  });
+
+  if (data?.success) notify(data.message || "Passenger registered successfully!");
+  return data;
+};
+
+
 // ==============================
-// DASHBOARD API
+// DASHBOARD APIs
 // ==============================
 export const fetchDashboard = async () => {
   const res = await apiRequest("/dashboard");
@@ -151,7 +200,6 @@ export const fetchDashboard = async () => {
 export const fetchTrips = async () =>
   unwrapArray(await apiRequest("/trips")).map(normalizeTrip);
 
-// ✅ Updated endpoint to match backend
 export const fetchTripsWithBookings = async () =>
   unwrapArray(await apiRequest("/trips/with-bookings")).map((t) => ({
     ...normalizeTrip(t),
@@ -169,75 +217,165 @@ export const fetchTripById = async (id) => {
   return res?.data ? normalizeTrip(res.data) : null;
 };
 
-export const createTrip = (trip) =>
-  apiRequest("/trips", { method: "POST", body: JSON.stringify(trip) });
+export const createTrip = async (trip) => {
+  const res = await apiRequest("/trips", { method: "POST", body: JSON.stringify(trip) });
+  if (res?.success) notify(res.message || "Trip created successfully!");
+  return res;
+};
 
-export const startTrip = (id) =>
-  apiRequest(`/trips/${id}/start`, { method: "PATCH" });
+export const startTrip = async (id) => {
+  const res = await apiRequest(`/trips/${id}/start`, { method: "PATCH" });
+  if (res?.success) notify(res.message || "Trip started successfully!");
+  return res;
+};
 
-export const completeTrip = (id) =>
-  apiRequest(`/trips/${id}/complete`, { method: "PATCH" });
+export const completeTrip = async (id) => {
+  const res = await apiRequest(`/trips/${id}/complete`, { method: "PATCH" });
+  if (res?.success) notify(res.message || "Trip completed successfully!");
+  return res;
+};
 
-/// ==============================
-/// ==============================
+// ==============================
 // BOOKINGS APIs
 // ==============================
-
-/**
- * Fetch active bookings for a trip
- * @param {number|string} tripId
- * @returns {Promise<Array>}
- */
 export const fetchActiveBookings = async (tripId) => {
   if (!tripId) return [];
   try {
     const res = await apiRequest(`/bookings/${tripId}/active`);
-    const bookings = unwrapArray(res).map((b) => normalizeBooking(b, "active"));
-    return bookings;
+    return unwrapArray(res).map((b) => normalizeBooking(b, "active"));
   } catch (err) {
-    console.error("fetchActiveBookings error:", err);
+    notify(err.message, "error");
     return [];
   }
 };
 
-/**
- * Fetch cancelled bookings for a trip
- * @param {number|string} tripId
- * @returns {Promise<Array>}
- */
 export const fetchCancelledBookings = async (tripId) => {
   if (!tripId) return [];
   try {
     const res = await apiRequest(`/bookings/${tripId}/cancelled`);
-    const bookings = unwrapArray(res).map((b) => normalizeBooking(b, "cancelled"));
-    return bookings;
+    return unwrapArray(res).map((b) => normalizeBooking(b, "cancelled"));
   } catch (err) {
-    console.error("fetchCancelledBookings error:", err);
+    notify(err.message, "error");
     return [];
   }
 };
 
-/**
- * Cancel a booking and return updated booking
- * @param {number|string} bookingId
- * @param {function} onUpdateSeats - callback to update seats in UI
- */
 export const cancelBooking = async (bookingId, onUpdateSeats) => {
   if (!bookingId) throw new Error("Invalid booking ID");
   try {
-    const res = await apiRequest(`/bookings/${bookingId}/cancel`, {
-      method: "PUT",
-    });
-
+    const res = await apiRequest(`/bookings/${bookingId}/cancel`, { method: "PUT" });
     if (res.success) {
-      // Update seats locally if callback provided
       if (typeof onUpdateSeats === "function") onUpdateSeats(-1);
+      notify(res.message || "Booking cancelled!");
       return res;
-    } else {
-      throw new Error(res.message || "Failed to cancel booking");
     }
+    throw new Error(res.message || "Failed to cancel booking");
   } catch (err) {
-    console.error("cancelBooking error:", err);
+    notify(err.message, "error");
     throw err;
   }
+};
+
+// ==============================
+// EMAIL & PASSWORD RESET
+// ==============================
+// ==============================
+// EMAIL & PASSWORD RESET
+// ==============================
+export const verifyEmail = async (email) => {
+  return await apiRequest("/auth/passenger/verify-email", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
+};
+
+export const resetPassword = async (email, password) => {
+  return await apiRequest("/auth/passenger/reset-password", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+};
+
+// ==============================
+// PASSENGER PROFILE APIs
+// ==============================
+export const getPassengerProfile = async () => {
+  const res = await apiRequest("/users/passenger/profile");
+  return res.data;
+};
+
+export const updatePassengerProfile = async (profileData) => {
+  const res = await apiRequest("/users/passenger/profile", {
+    method: "PUT",
+    body: JSON.stringify(profileData),
+  });
+  if (res?.success) notify(res.message || "Profile updated successfully!");
+  return res;
+};
+
+export const changePassengerPassword = async (passwordData) => {
+  const res = await apiRequest("/users/change-password", {
+    method: "PUT",
+    body: JSON.stringify(passwordData),
+  });
+  if (res?.success) notify(res.message || "Password changed successfully!");
+  return res;
+};
+
+// ==============================
+// PROFILE PICTURE UPLOAD
+// ==============================
+export const updateProfilePicture = async (file) => {
+  if (!file) throw new Error("No file provided");
+
+  const token = getToken();
+  const formData = new FormData();
+  formData.append("profile_picture", file);
+
+  const res = await fetch(`${BASE_URL}/users/profile-picture`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      // DO NOT set Content-Type! Let the browser handle FormData
+    },
+    body: formData,
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    notify(data.message || "Image upload failed", "error");
+    throw new Error(data.message || "Image upload failed");
+  }
+
+  notify("Profile picture updated!");
+  return data; // data.profile_picture contains the path
+};
+
+
+
+
+
+export const getImageUrl = (path) => {
+  if (!path) return null;
+
+  // If the path is already a full URL (e.g., production CDN)
+  if (path.startsWith("http")) return path;
+
+  // Remove "/api" from BASE_URL to access static files
+  const base = BASE_URL.replace("/api", "");
+
+  // Ensure leading slash
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+
+  return `${base}${cleanPath}`;
+};
+
+
+// ==============================
+// DRIVER PROFILE API
+// ==============================
+export const fetchDriverProfile = async () => {
+  const res = await apiRequest("/users/driver/profile"); // make sure your backend route exists
+  return res.data;
 };
