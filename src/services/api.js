@@ -379,3 +379,178 @@ export const fetchDriverProfile = async () => {
   const res = await apiRequest("/users/driver/profile"); // make sure your backend route exists
   return res.data;
 };
+/// ==============================
+// DASHBOARD API ENDPOINTS
+// ==============================
+
+// Fetch upcoming trips for passenger dashboard
+export const fetchUpcomingTrips = async () => {
+  try {
+    const res = await apiRequest("/trips/upcoming");
+    // backend returns { success: true, upcomingTrips: [...] }
+    const trips = res.upcomingTrips || [];
+    return trips.map(normalizeTrip);
+  } catch (err) {
+    console.error("Error fetching upcoming trips:", err.message);
+    return [];
+  }
+};
+
+// Fetch past trips (endpoint does not exist yet)
+export const fetchPastTrips = async () => {
+  // Currently backend does not provide /trips/past
+  return [];
+};
+
+// Fetch notifications
+export const fetchNotifications = async () => {
+  try {
+    const res = await apiRequest("/trips/notifications");
+    // backend may return { success: true, data: [...] } or array directly
+    if (Array.isArray(res)) return res;
+    if (Array.isArray(res.data)) return res.data;
+    return [];
+  } catch (err) {
+    console.error("Error fetching notifications:", err.message);
+    return [];
+  }
+};
+
+// Fetch dashboard stats (cards)
+export const fetchDashboardStats = async () => {
+  try {
+    const res = await apiRequest("/trips/stats");
+    const data = res.data || {};
+    return {
+      tripsThisMonth: data.tripsThisMonth || 0,
+      totalSpend: data.totalSpend || 0,
+      notifications: data.notifications || 0,
+    };
+  } catch (err) {
+    console.error("Error fetching dashboard stats:", err.message);
+    return {
+      tripsThisMonth: 0,
+      totalSpend: 0,
+      notifications: 0,
+    };
+  }
+};
+
+// Fetch current active trip
+export const fetchCurrentTrip = async () => {
+  try {
+    const res = await apiRequest("/trips/current");
+    return res.data ? normalizeTrip(res.data) : null;
+  } catch (err) {
+    console.error("Error fetching current trip:", err.message);
+    return null;
+  }
+};
+import { toast } from "react-toastify"; // or your toast lib
+// import { BASE_URL, getToken } from "./api"; // adjust if needed
+
+export const cancelpassengerBooking = async (bookingId) => {
+  if (!bookingId) {
+    toast.error("Invalid booking ID");
+    throw new Error("Invalid booking ID");
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/trips/booking/${bookingId}/cancel`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+
+    let data = {};
+    try {
+      data = await res.json();
+    } catch {
+      data = {};
+    }
+
+    if (!res.ok) {
+      const message = data.message || "Failed to cancel trip";
+      toast.error(message);
+      throw new Error(message);
+    }
+
+    // ✅ SUCCESS TOAST
+    toast.success(data.message || "Trip cancelled successfully");
+
+    return data;
+
+  } catch (err) {
+    toast.error(err.message || "Something went wrong");
+    throw err;
+  }
+};
+
+// src/services/api.js
+export const markAllNotificationsAsRead = async () => {
+  const res = await fetch(`${BASE_URL}/trips/notifications/read`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  let data = {};
+  try {
+    data = await res.json();
+  } catch (err) {
+    data = { success: false, message: "Invalid server response" };
+  }
+
+  if (!res.ok) throw new Error(data.message || "Failed to mark notifications as read");
+
+  return data;
+};
+
+
+export const fetchAvailableTrips = async () => {
+  try {
+    const res = await apiRequest("/trips/available");
+
+    return Array.isArray(res?.trips)
+      ? res.trips.map((trip) => ({
+          id: trip.trip_id,
+          driver_id: trip.driver_id,
+          driver_name: trip.driver_name,
+          driver_phone: trip.driver_phone,
+          start_location: trip.start_location,
+          end_location: trip.end_location,
+          departure_datetime: trip.departure_datetime,
+          seats_available: Number(trip.seats_available),
+          price_per_seat: Number(trip.amount_per_seat),
+          status: trip.status,
+        }))
+      : [];
+  } catch (err) {
+    console.error("Error fetching available trips:", err.message);
+    return [];
+  }
+};
+
+
+
+export const bookTrip = async ({ trip_id, seat_count = 1, payment_method = "mpesa" }) => {
+  try {
+    const res = await apiRequest("/trips/book", {
+      method: "POST",
+      body: JSON.stringify({
+        trip_id,
+        seat_count,
+        payment_method,
+      }),
+    });
+
+    return res;
+  } catch (err) {
+    console.error("Error booking trip:", err.message);
+    throw err;
+  }
+};

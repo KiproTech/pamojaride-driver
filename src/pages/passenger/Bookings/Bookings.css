@@ -75,3 +75,90 @@
     flex-direction: column;
   }
 }
+
+/* Booking Ticket / Boarding Pass */
+.booking-ticket.boarding-pass {
+  border: 2px dashed #10b981;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+  background: #f9f9f9;
+  max-width: 400px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
+
+.booking-ticket .ticket-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* logo left, title centered */
+  margin-bottom: 12px;
+}
+
+.ticket-logo {
+  width: 60px;
+  height: auto;
+}
+
+.booking-ticket .ticket-header h4 {
+  margin: 0 auto;
+  font-size: 16px;
+  color: #10b981;
+  text-align: center;
+  flex: 1;
+}
+
+.booking-ticket .ticket-id {
+  font-size: 12px;
+  color: #333;
+}
+
+.booking-ticket .ticket-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.booking-ticket .trip-info {
+  flex: 1;
+}
+
+.booking-ticket .trip-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.booking-ticket .ticket-qr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.booking-ticket .download-btn {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.booking-ticket .download-btn:hover {
+  opacity: 0.9;
+}
+
+/* Responsive for small screens */
+@media (max-width: 600px) {
+  .booking-ticket .ticket-body {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ticket-logo {
+    margin-bottom: 8px;
+  }
+}

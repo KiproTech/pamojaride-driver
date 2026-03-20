@@ -6,8 +6,10 @@ const Bookings = () => {
   return (
     <div className="passenger-bookings">
       <h2>My Bookings</h2>
-      <ActiveBookings />
-      {/* You can add PastBookings later if needed */}
+
+      <div className="bookings-section">
+        <ActiveBookings />
+      </div>
     </div>
   );
 };

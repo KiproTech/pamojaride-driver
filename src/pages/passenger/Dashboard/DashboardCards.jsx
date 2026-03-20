@@ -1,13 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchDashboardStats } from "../../../services/api";
 import "./dashboard.css";
 
 const DashboardCards = () => {
-  // Placeholder stats; can be dynamically fetched from an API later
-  const stats = {
-    tripsThisMonth: 3,
-    totalSpend: 250,
-    notifications: 2
-  };
+  const [stats, setStats] = useState({
+    tripsThisMonth: 0,
+    totalSpend: 0,
+    notifications: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const data = await fetchDashboardStats();
+        setStats({
+          tripsThisMonth: data?.tripsThisMonth || 0,
+          totalSpend: data?.totalSpend || 0,
+          notifications: data?.notifications || 0
+        });
+      } catch (err) {
+        console.error("Failed to load dashboard stats:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStats();
+  }, []);
+
+  if (loading) return <p>Loading stats...</p>;
 
   return (
     <div className="dashboard-cards">
@@ -18,7 +40,7 @@ const DashboardCards = () => {
 
       <div className="card">
         <h4>Total Spend</h4>
-        <p>${stats.totalSpend}</p>
+        <p>Ksh {stats.totalSpend}</p>
       </div>
 
       <div className="card">
